@@ -46,6 +46,7 @@ def run_agent3(repo_url: str, access_token: str, base_branch: str, directory: st
         print("PR result:", pr_result)
 
         return {"status": "pass", "push_result": push_result, "pr_result": pr_result}
+        # return {"status": "pass", "push_result": push_result}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
