@@ -122,7 +122,7 @@ def create_github_pr(repo_url, token, head_branch, base_branch, title, body):
     print(f"Head Branch: {head_branch}")
     print(f"Base Branch: {base_branch}")
     print(f"Access Token: {token}")
-    
+
     repo_url_clean = repo_url.removesuffix(".git")
     parts = repo_url_clean.split("/")
     owner, repo = parts[-2], parts[-1]
@@ -167,6 +167,7 @@ def push_code_api(payload: PushPayload):
 
 @app.post("/create_pr")
 def create_pr_api(payload: PRPayload):
+    print("Creating GitHub PR...")
     pr_info = create_github_pr(
         repo_url=payload.repo_url,
         token=payload.access_token,
