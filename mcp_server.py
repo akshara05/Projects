@@ -116,60 +116,60 @@ def push_folder_to_new_branch(folder_path, repo_url, token, base_name, commit_me
     repo.git.push("origin", new_branch, force=True)
     return new_branch
 
-# def create_github_pr(repo_url, token, head_branch, base_branch, title, body):
-#     repo_url_clean = repo_url.removesuffix(".git")
-#     parts = repo_url_clean.split("/")
-#     owner, repo = parts[-2], parts[-1]
-
-#     api_url = f"https://api.github.com/repos/{owner}/{repo}/pulls"
-#     headers = {"Authorization": f"Bearer {token}"}
-#     payload = {"title": title, "head": head_branch, "base": base_branch, "body": body}
-
-#     response = requests.post(api_url, headers=headers, json=payload)
-#     if response.status_code == 201:
-#         pr = response.json()
-#         return {"url": pr["html_url"], "number": pr["number"]}
-#     else:
-#         raise HTTPException(response.status_code, response.text)
-import base64
-
 def create_github_pr(repo_url, token, head_branch, base_branch, title, body):
     repo_url_clean = repo_url.removesuffix(".git")
-    parts = repo_url_clean.strip("/").split("/")
+    parts = repo_url_clean.split("/")
     owner, repo = parts[-2], parts[-1]
 
     api_url = f"https://api.github.com/repos/{owner}/{repo}/pulls"
-
-    # 🔧 Encode username:token in Basic Auth
-    username = owner  # or your GitHub username
-    auth_string = f"{username}:{token}"
-    b64_auth = base64.b64encode(auth_string.encode()).decode()
-
-    headers = {
-        "Authorization": f"Basic {b64_auth}",   # ✅ alternative to `token <pat>`
-        "Accept": "application/vnd.github+json"
-    }
-
-    payload = {
-        "title": title,
-        "head": head_branch,
-        "base": base_branch,
-        "body": body
-    }
-
-    print("➡️ Creating PR with payload:", payload)
-    print("➡️ API URL:", api_url)
+    headers = {"Authorization": f"Bearer {token}"}
+    payload = {"title": title, "head": head_branch, "base": base_branch, "body": body}
 
     response = requests.post(api_url, headers=headers, json=payload)
-
-    print("⬅️ GitHub status:", response.status_code)
-    print("⬅️ GitHub response:", response.text)
-
     if response.status_code == 201:
         pr = response.json()
         return {"url": pr["html_url"], "number": pr["number"]}
     else:
         raise HTTPException(response.status_code, response.text)
+import base64
+
+# def create_github_pr(repo_url, token, head_branch, base_branch, title, body):
+#     repo_url_clean = repo_url.removesuffix(".git")
+#     parts = repo_url_clean.strip("/").split("/")
+#     owner, repo = parts[-2], parts[-1]
+
+#     api_url = f"https://api.github.com/repos/{owner}/{repo}/pulls"
+
+#     # 🔧 Encode username:token in Basic Auth
+#     username = owner  # or your GitHub username
+#     auth_string = f"{username}:{token}"
+#     b64_auth = base64.b64encode(auth_string.encode()).decode()
+
+#     headers = {
+#         "Authorization": f"Basic {b64_auth}",   # ✅ alternative to `token <pat>`
+#         "Accept": "application/vnd.github+json"
+#     }
+
+#     payload = {
+#         "title": title,
+#         "head": head_branch,
+#         "base": base_branch,
+#         "body": body
+#     }
+
+#     print("➡️ Creating PR with payload:", payload)
+#     print("➡️ API URL:", api_url)
+
+#     response = requests.post(api_url, headers=headers, json=payload)
+
+#     print("⬅️ GitHub status:", response.status_code)
+#     print("⬅️ GitHub response:", response.text)
+
+#     if response.status_code == 201:
+#         pr = response.json()
+#         return {"url": pr["html_url"], "number": pr["number"]}
+#     else:
+#         raise HTTPException(response.status_code, response.text)
 
 
 # ---- REST Endpoints ----
