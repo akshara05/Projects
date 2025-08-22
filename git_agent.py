@@ -33,7 +33,7 @@ def run_agent3(repo_url: str, access_token: str, base_branch: str, directory: st
 
         # 2. Create PR for that branch
         print("Creating PR for new branch...")
-        pr_resp = requests.post("http://192.168.208.84:9000/create_pr", json={
+        print({
             "repo_url": repo_url,
             "access_token": access_token,
             "head_branch": branch_name,
@@ -41,12 +41,20 @@ def run_agent3(repo_url: str, access_token: str, base_branch: str, directory: st
             "pr_title": f"Update code in {branch_name}",
             "pr_body": "Automated PR with updated code."
         })
-        pr_resp.raise_for_status()
-        pr_result = pr_resp.json()
-        print("PR result:", pr_result)
+        # pr_resp = requests.post("http://192.168.208.84:9000/create_pr", json={
+        #     "repo_url": repo_url,
+        #     "access_token": access_token,
+        #     "head_branch": branch_name,
+        #     "base_branch": base_branch,   # ✅ fixed naming
+        #     "pr_title": f"Update code in {branch_name}",
+        #     "pr_body": "Automated PR with updated code."
+        # })
+        # pr_resp.raise_for_status()
+        # pr_result = pr_resp.json()
+        # print("PR result:", pr_result)
 
-        return {"status": "pass", "push_result": push_result, "pr_result": pr_result}
-        # return {"status": "pass", "push_result": push_result}
+        # return {"status": "pass", "push_result": push_result, "pr_result": pr_result}
+        return {"status": "pass", "push_result": push_result}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
